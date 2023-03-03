@@ -94,8 +94,6 @@ export const searchCourses = (
 
       dispatch(reducer.searched({ allcourses, search }));
     } catch (error) {
-      console.log("no se encontro el curso buscado, se muestran todos");
-
       dispatch(reducer.searched(error));
     }
   };
@@ -105,7 +103,6 @@ export const setCurrentCourse = (
   card: CoursoBack
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return (dispatch) => {
-    console.log(card);
     return dispatch(reducer.currentCourse(card));
   };
 };
@@ -118,7 +115,6 @@ export const createCourseAction = (
     axios
       .post(BACK + "/courses/", course)
       .then((response) => {
-        console.log(response);
         dispatch(reducer.createCourse());
         Swal.fire("Course created successfully!", "", "success");
       })
@@ -129,17 +125,17 @@ export const createCourseAction = (
   };
 };
 export const editCourseAction = (
-  course: createCourse
+  course: createCourse,
+  id: string
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return (dispatch) => {
     dispatch(reducer.setLoading());
     axios
       .put(BACK + "/courses", course)
       .then((response) => {
-        console.log(response);
         dispatch(reducer.createCourse());
         Swal.fire("Course edited successfully!", "", "success").then(() => {
-          window.location.href = `/courseDetail/${course.name}`;
+          window.location.href = `/courseDetail/${id}`;
         });
       })
       .catch((err) => {
@@ -245,8 +241,6 @@ export const addToCart = (
   card: CoursoBack
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return (dispatch) => {
-    console.log(card);
-
     return dispatch(reducer.addToCart(card));
   };
 };
@@ -255,7 +249,6 @@ export const removeToCart = (
   card: CoursoBack
 ): ThunkAction<void, RootState, unknown, AnyAction> => {
   return (dispatch) => {
-    console.log(card);
     return dispatch(reducer.removeToCart(card));
   };
 };
@@ -290,8 +283,14 @@ export const AddRating = (
     axios
       .put(BACK + "/courses/putRating", rating)
       .then((response) => {
-        console.log(response);
-        dispatch(reducer.addRating({rating: rating.rating.rating, comment: rating.rating.comment, user: rating.rating.user, course: rating.nameCourse }));
+        dispatch(
+          reducer.addRating({
+            rating: rating.rating.rating,
+            comment: rating.rating.comment,
+            user: rating.rating.user,
+            course: rating.nameCourse,
+          })
+        );
       })
       .catch((err) => {
         Swal.fire("Something went wrong, please try again", "", err);
@@ -311,5 +310,27 @@ export const clearBoughtCart = (
     });
 
     return dispatch(reducer.filterBoughtCart(newCart));
+  };
+};
+
+export const DeletedCourse = (
+  course: any,
+  siono: boolean
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  course.siono = siono;
+  return (dispatch) => {
+    if (siono) {
+      axios
+        .put(`${REACT_APP_BASE_URL}/courses/logicDelete?id=${course[0].id}`)
+        .then((response) => {
+          dispatch(reducer.DeletedCourses(course));
+        });
+    } else {
+      axios
+        .put(`${REACT_APP_BASE_URL}/courses/logicRestore?id=${course[0].id}`)
+        .then((response) => {
+          dispatch(reducer.DeletedCourses(course));
+        });
+    }
   };
 };

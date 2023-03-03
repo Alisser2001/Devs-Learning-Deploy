@@ -6,7 +6,7 @@ const initialState: CreateUserInterface = {
   password: "",
   rpassword: "",
   email: "",
-  rank: 2,
+  rank: "student",
   profileImg: "",
   status: "notLogged",
   courses: [],
@@ -16,22 +16,24 @@ export const userSign = createSlice({
   name: "users",
   initialState,
   reducers: {
-    signUp: (state, { payload }) => { },
+    signUp: (state, { payload }) => {},
     signIn: (state, { payload }) => {
-      state.status = payload;
+      state.status = "logged";
+      state.fullname = payload.fullname;
+      state.rank = payload.rank;
     },
     getUser: (state, { payload }) => {
       state.status = payload;
     },
-    changeEmail: (state) => { },
-    changePass: (state) => { },
-    recover: (state) => { },
+    changeEmail: (state) => {},
+    changePass: (state) => {},
+    recover: (state) => {},
     logOut: (state) => {
       state.fullname = "";
       state.password = "";
       state.rpassword = "";
       state.email = "";
-      state.rank = 2;
+      state.rank = "student";
       state.profileImg = "";
       state.status = "notLogged";
       state.courses = [];
@@ -43,6 +45,10 @@ export const userSign = createSlice({
     },
     setBoughtCourses: (state, { payload }) => {
       state.courses = payload;
+    },
+
+    getAdmin: (state, { payload }) => {
+      state.rank = payload;
     },
   },
 });

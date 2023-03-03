@@ -12,25 +12,40 @@ import { CoursoBack } from "../../Cards/Card";
 import { setCurrentCourse } from "../../../redux/courses/actions";
 import { AddRating } from "../../../redux/courses/actions";
 
+import Stack from "@mui/material/Stack";
+import Snackbar from "@mui/material/Snackbar";
+import MuiAlert, { AlertProps } from "@mui/material/Alert";
+
 interface CourseCommentProps {
   course: CoursoBack;
   userId: any;
 }
+
+const Alert = React.forwardRef<HTMLDivElement, AlertProps>(function Alert(
+  props,
+  ref
+) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
   const dispatch = useAppDispatch();
   const currentCourse = useAppSelector((state) => state.courses.currentCourse);
   const [comment, setComment] = useState("");
   const [value, setValue] = React.useState<number | null>(0);
+  //for Alerts
+  const [open, setOpen] = React.useState(false);
 
-  /*   const [rating, setRating] = useState({
-    nameCourse: course.name,
-    rating: {
-      rating: 0,
-      comment: "",
-      user: userId,
-    },
-  }); */
+  const handleClose = (
+    event?: React.SyntheticEvent | Event,
+    reason?: string
+  ) => {
+    if (reason === "clickaway") {
+      return;
+    }
+
+    setOpen(false);
+  };
 
   let RATING = {
     nameCourse: course.name,
@@ -49,8 +64,6 @@ const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
     if (existingRating) {
       setComment(existingRating[0].comment);
       setValue(existingRating[0].rating);
-      console.log("El rating existente es");
-      console.log(existingRating);
     }
   };
 
@@ -61,9 +74,6 @@ const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
     if (!showInput) {
       getCommentIfExists();
       dispatch(setCurrentCourse(course));
-      console.log("Curso Actual");
-      console.log(currentCourse);
-      console.log(RATING);
     }
 
     setShowInput(!showInput);
@@ -77,9 +87,8 @@ const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
     event.preventDefault();
     // Aquí podrías enviar el comentario a tu backend o hacer lo que necesites
     dispatch(AddRating(RATING));
-    console.log("Nuevo rating");
-    console.log(currentCourse.rating);
     setShowInput(false);
+    setOpen(true);
   };
 
   useEffect(() => {
@@ -104,8 +113,6 @@ const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
               value={value}
               onChange={(event, newValue) => {
                 setValue(newValue);
-                console.log(RATING);
-                console.log(value + ", " + newValue);
               }}
             />
             <Box display="flex" mt={1}>
@@ -128,6 +135,21 @@ const CourseComment: React.FC<CourseCommentProps> = ({ course, userId }) => {
           </Box>
         </form>
       )}
+      <Snackbar
+        anchorOrigin={{ vertical: "bottom", horizontal: "left" }}
+        open={open}
+        autoHideDuration={3000}
+        onClose={handleClose}
+      >
+        <Alert
+          onClose={handleClose}
+          severity="success"
+          sx={{ width: "100%" }}
+          color="info"
+        >
+          Your review has been updated!
+        </Alert>
+      </Snackbar>
     </div>
   );
 };

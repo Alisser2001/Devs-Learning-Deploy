@@ -20,6 +20,7 @@ import LandingPage from "../components/Landing/LandingPage";
 import DashboardAdmin from "../components/Dashboards/Admin/DashboardAdmin";
 import UserDashboard from "../components/Dashboards/UserDashboard";
 import {
+  getAdmin,
   getBoughtCoursesNames,
   getUser,
   setFullName,
@@ -40,6 +41,8 @@ const { REACT_APP_FIREBASE_CONFIG } = process.env;
 export const AppRouter = () => {
   const dispatch = useAppDispatch();
   let { status } = useAppSelector((state) => state.users);
+  let { email } = useAppSelector((state) => state.users);
+
   const firebaseConfig = JSON.parse(REACT_APP_FIREBASE_CONFIG!);
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
@@ -74,7 +77,7 @@ export const AppRouter = () => {
     }
   }, [status]);
 
-  const { courses } = useAppSelector((state) => state.users);
+  const { courses, rank } = useAppSelector((state) => state.users);
 
   useEffect(() => {
     dispatch(clearBoughtCart(cart, courses));
@@ -100,6 +103,10 @@ export const AppRouter = () => {
 
   ///////////////////////////////////
 
+  useEffect(() => {
+    dispatch(getAdmin(email));
+  }, [email]);
+
   return (
     <div>
       <NavBar />
@@ -109,10 +116,8 @@ export const AppRouter = () => {
         <Route path={`/courseDetail/:id`} element={<CourseDetail />} />
         <Route path={`/categories`} element={<Categories />} />
         <Route path={`/categories/:name`} element={<CoursePerCategories />} />
-        <Route path={`/dash/Admin`} element={<DashboardAdmin />} />
         <Route path={"/user"} element={<UserDashboard />} />
         <Route path={"/payment/processing"} element={<ProcessingPage />} />
-        {/* <Route path={`/dashboard/edit/course/:id`} element={<EditForm />} /> */}
 
         <Route
           path={`/auth/*`}
@@ -126,7 +131,7 @@ export const AppRouter = () => {
           path={`/*`}
           element={
             <PrivateRoute isLoggedin={status}>
-              <LoggedRoutes rol={"user"} />
+              <LoggedRoutes rol={rank} />
             </PrivateRoute>
           }
         />

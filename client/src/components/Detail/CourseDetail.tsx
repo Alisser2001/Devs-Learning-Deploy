@@ -3,12 +3,13 @@ import { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../hooks/hooksRedux";
 import { Link as ReactLink } from "react-router-dom";
 import axios from "axios";
+import "./CourseDetail.css";
 
 //MUI
 import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import Typography from "@mui/material/Typography";
-import { Button } from "@mui/material";
+import { Avatar, Button, css, ListItemAvatar } from "@mui/material";
 import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
 import Chip from "@mui/material/Chip";
 import Breadcrumbs from "@mui/material/Breadcrumbs";
@@ -20,6 +21,11 @@ import Divider from "@mui/material/Divider";
 import Stack from "@mui/material/Stack";
 import Rating from "@mui/material/Rating";
 
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import SchoolIcon from "@mui/icons-material/School";
+import WifiIcon from "@mui/icons-material/Wifi";
+import ComputerIcon from "@mui/icons-material/Computer";
+
 import { useParams } from "react-router-dom";
 import {
   getCourses,
@@ -28,11 +34,8 @@ import {
 } from "../../redux/courses/actions";
 import { setItem } from "../../utils/localStorage";
 import { CoursoBack } from "../Cards/Card";
-
-const BACK =
-  process.env.NODE_ENV === "production"
-    ? "http://181.127.189.247:3001"
-    : "http://localhost:3001";
+const { REACT_APP_PROD_URL, REACT_APP_BASE_URL } = process.env;
+const BACK = REACT_APP_BASE_URL || REACT_APP_PROD_URL;
 
 interface UserParams {
   id: string;
@@ -68,9 +71,8 @@ const CourseDetail: React.FC = () => {
       name: NewName.replaceAll("-", " "),
       price: MyCourseInfo.price,
       rating: MyCourseInfo.rating,
+      deleted: MyCourseInfo.deleted,
     };
-    console.log(`Courseinfo`);
-    console.log(InfoToKeep);
 
     dispatch(setCurrentCourse(InfoToKeep));
     return InfoToKeep;
@@ -119,9 +121,7 @@ const CourseDetail: React.FC = () => {
     InfoKeeper();
   }, [coursesFiltered]);
 
-  const handleCategorieClick = () => {
-    console.log(`Redireccionando al filtro por categoria`);
-  };
+  const handleCategorieClick = () => {};
 
   const getRatingAVG = () => {
     function calcularPromedio(numeros: number[]): number {
@@ -133,9 +133,8 @@ const CourseDetail: React.FC = () => {
       return rat.rating;
     });
     if (ratings.length > 0) {
-      console.log(ratings);
       const average = calcularPromedio(ratings);
-      console.log(average);
+
       return average;
     } else {
       return 0;
@@ -146,7 +145,7 @@ const CourseDetail: React.FC = () => {
 
   return (
     <div>
-      <Grid container bgcolor="whitesmoke" spacing={5} direction="row" mt={5}>
+      <Grid container bgcolor="whitesmoke" direction="row" mt={10} spacing="10">
         <Grid item xs={12} ml={1}>
           <Breadcrumbs aria-label="breadcrumb">
             <Link underline="hover" color="inherit" href="/courses">
@@ -185,8 +184,7 @@ const CourseDetail: React.FC = () => {
             {TheCourse.name}{" "}
           </Typography>
           <Typography ml={1} variant="subtitle1">
-            {" "}
-            Creado por {TheCourse.instructor}
+            Teached by {TheCourse.instructor}
           </Typography>
         </Grid>
         <Grid
@@ -198,7 +196,10 @@ const CourseDetail: React.FC = () => {
           flexDirection="column"
           justifyContent="center"
         >
-          <Box display="flex" justifyContent="space-around">
+          <Box display="flex" justifyContent="space-around" margin={1}>
+            <Typography variant="h5">Get it for only</Typography>
+          </Box>
+          <Box display="flex" justifyContent="space-around" margin={1}>
             <Typography variant="h4" p={2}>
               {" "}
               $ {TheCourse.price} ARS{" "}
@@ -206,11 +207,6 @@ const CourseDetail: React.FC = () => {
           </Box>
 
           <Box display="flex" justifyContent="space-around">
-            <Button size="medium" variant="contained">
-              <Typography variant="button" p={0.5}>
-                Buy now
-              </Typography>
-            </Button>
             <Button
               size="medium"
               color="secondary"
@@ -233,18 +229,18 @@ const CourseDetail: React.FC = () => {
             alignItems="center"
             ml={1}
           >
-            <img src={TheCourse.img} alt="CourseIMG" width="100%" />
+            <img src={TheCourse.img} alt="CourseIMG" width="48%" />
           </Box>
         </Grid>
         <Grid item xs={12} md={3} lg={3} display="flex" flexDirection="column">
           <List sx={ListStyle} component="nav" aria-label="mailbox folders">
             <Divider />
             <ListItem button>
-              <ListItemText secondary={`Duración: ${TheCourse.duration} hs.`} />
+              <ListItemText secondary={`Duration: ${TheCourse.duration} hs.`} />
             </ListItem>
             <Divider />
             <ListItem button divider>
-              <ListItemText secondary={`Nivel: ${TheCourse.level}`} />
+              <ListItemText secondary={`Level: ${TheCourse.level}`} />
             </ListItem>{" "}
             <Divider />
             <ListItem button divider>
@@ -252,17 +248,51 @@ const CourseDetail: React.FC = () => {
               <Box ml={1}>
                 <ListItemText
                   secondary={
-                    AverageRating !== 0
-                      ? AverageRating
-                      : "No hay calificaciones aún"
+                    AverageRating !== 0 ? AverageRating : "No rating yet"
                   }
                 />
               </Box>
             </ListItem>
+            <List>
+              <ListItemText>Requirements</ListItemText>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <WifiIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary="Internet Conection"
+                  secondary="You should have access to a PC with internet conection to use the material of the course"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <ComputerIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary="Tech Requirements"
+                  secondary="Windows 7 or superior, GNU/Linux (Ubuntu, Debian...) or Mac OS X"
+                />
+              </ListItem>
+              <ListItem>
+                <ListItemAvatar>
+                  <Avatar>
+                    <SchoolIcon />
+                  </Avatar>
+                </ListItemAvatar>
+                <ListItemText
+                  primary="Minimum knowledge"
+                  secondary="You should understand the basics concepts of Algebra in order to work with algorithms."
+                />
+              </ListItem>
+            </List>
             <Divider light />
           </List>
         </Grid>
-        <Grid item xs={12} md={9} lg={9} p={1} mb={8}>
+        <Grid item xs={12} md={9} lg={9} p={1} mb={4}>
           <Box boxShadow={2} ml={1} p={3}>
             <Typography variant="body1">
               {" "}
@@ -300,6 +330,19 @@ const CourseDetail: React.FC = () => {
           </Box>
         </Grid>
       </Grid>
+      <Box
+        display="flex"
+        justifyContent={"center"}
+        alignItems={"center"}
+        bgcolor="whitesmoke"
+        py={1}
+      >
+        <Button startIcon={<ArrowBackIcon />} variant="outlined">
+          <Typography variant="h6" noWrap component="a" href="/courses">
+            Go Back
+          </Typography>
+        </Button>
+      </Box>
     </div>
   );
 };

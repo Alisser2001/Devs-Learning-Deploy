@@ -59,9 +59,13 @@ export const loginUser = (
           `${REACT_APP_BASE_URL}/banned?email=${email}`
         );
         if (!banned.data) {
+          const userDB = await axios.get(
+            `${REACT_APP_BASE_URL}/usersInfo?email=${email}`
+          );
+
           Swal.hideLoading();
           setAuth = "logged";
-          dispatch(reducer.signIn(setAuth));
+          dispatch(reducer.signIn(userDB.data[0]));
           Swal.fire("Logged in", "", "success");
         } else {
           Swal.fire(
@@ -90,11 +94,15 @@ export const signInWithGoogle = (
           .get(
             `${REACT_APP_BASE_URL}/banned?email=${userCredential.user.email}`
           )
-          .then((response) => {
+          .then(async (response) => {
             if (!response.data) {
+              const userDB = await axios.get(
+                `${REACT_APP_BASE_URL}/usersInfo?email=${userCredential.user.email}`
+              );
+
               Swal.hideLoading();
               setAuth = "logged";
-              dispatch(reducer.signIn(setAuth));
+              dispatch(reducer.signIn(userDB.data[0]));
               Swal.fire("Logged in", "", "success");
             } else {
               Swal.fire(
@@ -104,9 +112,7 @@ export const signInWithGoogle = (
               );
             }
           })
-          .catch((error) => {
-            console.log(error);
-          });
+          .catch((error) => {});
       }
     } catch (error: any) {
       Swal.hideLoading();
@@ -193,5 +199,20 @@ export const getBoughtCoursesNames = (
     });
 
     return dispatch(reducer.setBoughtCourses(user[0].courses));
+  };
+};
+
+export const getAdmin = (
+  email: string
+): ThunkAction<void, RootState, unknown, AnyAction> => {
+  return async (dispatch) => {
+    if (email.length > 5) {
+      let user = await axios
+        .get(`${REACT_APP_BASE_URL}/usersInfo?email=${email}`)
+
+        .then((response) => response.data);
+
+      return dispatch(reducer.getAdmin(user[0].rank));
+    }
   };
 };
