@@ -18,7 +18,7 @@ module.exports.postCourses = async function (course) {
       //console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      //console.log(error);
     });
 };
 
@@ -34,7 +34,7 @@ module.exports.postCategories = async function (category) {
       //console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      //console.log(error);
     });
 };
 ("/register");
@@ -51,6 +51,6 @@ module.exports.postAdmin = async function (user) {
       //console.log(response);
     })
     .catch(function (error) {
-      console.log(error);
+      //console.log(error);
     });
 };
