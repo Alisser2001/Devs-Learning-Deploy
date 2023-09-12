@@ -14,11 +14,8 @@ module.exports.postCourses = async function (course) {
   };
   await axios
     .post(`http://localhost:${SERVER_PORT}/courses`, courseDB)
-    .then(function (response) {
-      //console.log(response);
-    })
-    .catch(function (error) {
-      //console.log(error);
+    .catch(function (e) {
+      console.log(`Algo salió mal al publicar el curso ${courseDB.name}. Error: `, e);
     });
 };
 
@@ -30,11 +27,8 @@ module.exports.postCategories = async function (category) {
   };
   await axios
     .post(`http://localhost:${SERVER_PORT}/categories`, categoryDB)
-    .then(function (response) {
-      //console.log(response);
-    })
-    .catch(function (error) {
-      //console.log(error);
+    .catch(function (e) {
+      console.log(`Algo salió mal al publicar la categoria ${categoryDB.name}. Error: `, e);
     });
 };
 ("/register");
@@ -47,10 +41,7 @@ module.exports.postAdmin = async function (user) {
   };
   await axios
     .post(`http://localhost:${SERVER_PORT}/registerDB`, userDB)
-    .then(function (response) {
-      //console.log(response);
-    })
     .catch(function (error) {
-      //console.log(error);
+      console.log(`Algo salió mal al publicar el admin ${userDB.name}. Error: `, e);
     });
 };
