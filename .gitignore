@@ -1,0 +1,23 @@
+# Ignorar node_modules en todas partes del proyecto
+**/node_modules
+
+# Ignorar .pnp en todas partes del proyecto
+**/.pnp.*
+
+# Ignorar archivos .env en todas partes del proyecto
+**/.env
+
+# Ignorar package-lock.json en todas partes del proyecto
+**/package-lock.json
+
+# Ignorar node_modules, .pnp, .env y package-lock.json en la carpeta "api"
+/api/node_modules
+/api/.pnp.*
+/api/.env
+/api/package-lock.json
+
+# Ignorar node_modules, .pnp, .env y package-lock.json en la carpeta "client"
+/client/node_modules
+/client/.pnp.*
+/client/.env
+/client/package-lock.json
