@@ -41,7 +41,7 @@ module.exports.postAdmin = async function (user) {
   };
   await axios
     .post(`http://localhost:${SERVER_PORT}/registerDB`, userDB)
-    .catch(function (error) {
+    .catch(function (e) {
       console.log(`Algo salió mal al publicar el admin ${userDB.name}. Error: `, e);
     });
 };
