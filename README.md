@@ -1,30 +1,17 @@
-Proyecto de venta y creación de servicios através de cursos sobre programación, con el fin de ser presentado como proyecto final del bootcamp SoyHenry el 3 de febrero de 2023.
-El proyecto fue realizado en su mayoría con TypeScript, con tecnologias de JavaScript tales como Node js, React js, Express js y Redux, además del ORM Sequelize para el manejo
-de una base de datos con Postgresql.
-En su elaboración estuvimos involucradas 8 personas, con un tiempo aproximado de un mes para su entrega. El proyecto aún se encuentra en estimación por mejoras.
+![Copia de F](https://user-images.githubusercontent.com/59519580/215589040-a5eff0b0-35b0-4316-a85b-5a88eecb779c.png)
+<h1 align=center>Devs Learning(Plataforma de aprendizaje on-demand)</h1>
 
-Colaboradores:
+![devs-learning](https://user-images.githubusercontent.com/59519580/229355608-b5a7c4c5-18a7-49fc-8d6d-9d12885ad963.jpeg)
 
-Jonatan Villalva 
-jvillalva.sistemas@gmail.com
+<h4 align=center>Para probar la aplicación y su funcionamiento podes ingresar al siguiente link: https://devs-learning-5hal.vercel.app/</h4>
 
-Francisco Rivero
-francisco.rivero124@gmail.com
+<br><br>
+<h3 align="center">La plataforma fue desarrollada con las siguientes tecnologias<h3>
 
-Simon Navarrete
-nacor8xbox@gmail.com
-
-Gonzalo Leguiza
-leguizagonzalo98@gmail.com
-
-Federico Aldama
-fedealdama.fa@gmail.com
-
-Jonathan Kim
-jonnykimbk@hotmail.com
-
-Emiliano Galvan
-galvanalvarezemiliano@hotmail.com
-
-Estiven Muñoz
-estiven25b777@gmail.com
+<p align="center">
+  <img src="https://www.vectorlogo.zone/logos/typescriptlang/typescriptlang-ar21.svg" alt="html5" height="80" width="150">
+  <img src="https://www.vectorlogo.zone/logos/reactjs/reactjs-ar21.svg" alt="react" height="80" width="150">
+  <img src="https://www.vectorlogo.zone/logos/nodejs/nodejs-ar21.svg" alt="node" height="80" width="150">
+  <img src="https://www.vectorlogo.zone/logos/sequelizejs/sequelizejs-ar21.svg" alt="sequelize" height="80" width="150">
+  <img src="https://www.vectorlogo.zone/logos/firebase/firebase-ar21.svg" alt="firebase" height="80" width="150">
+</p>
